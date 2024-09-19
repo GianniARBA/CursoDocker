@@ -1,0 +1,34 @@
+name: entregafinal
+services:
+    mysql:
+        container_name: mysql_db
+        networks:
+            bridge_entrega:
+                aliases:
+                    - db
+        volumes:
+            - mysql_data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=sec-entrega
+            - MYSQL_DATABASE=todos
+        image: mysql:8.0
+    entrega:
+        container_name: entrega_sql
+        networks:
+            - bridge_entrega
+        ports:
+            - 3000:3000
+        environment:
+            - MYSQL_HOST=db
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=sec-entrega
+            - MYSQL_DB=todos
+        image: gianni29/entrega:v0.3
+networks:
+    bridge_entrega:
+        external: true
+        name: bridge_entrega
+volumes:
+    mysql_data:
+        external: true
+        name: mysql_data
